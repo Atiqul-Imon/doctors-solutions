@@ -139,7 +139,35 @@ The system uses JWT-based authentication with:
 
 ## 🚀 Deployment
 
-### Build for Production
+### Deploy to Vercel (Recommended)
+
+1. **Push to GitHub**:
+   ```bash
+   git push -u origin main
+   ```
+
+2. **Deploy via Vercel Dashboard**:
+   - Visit [vercel.com](https://vercel.com) and sign in with GitHub
+   - Click "Add New Project" and import your repository
+   - Add environment variables (see below)
+   - Click "Deploy"
+
+3. **Set Environment Variables in Vercel**:
+   - `MONGODB_URI` - Your MongoDB connection string
+   - `JWT_SECRET` - Strong secret for access tokens (use `openssl rand -base64 32`)
+   - `JWT_REFRESH_SECRET` - Strong secret for refresh tokens
+   - `JWT_EXPIRES_IN` - Access token expiration (default: `15m`)
+   - `JWT_REFRESH_EXPIRES_IN` - Refresh token expiration (default: `7d`)
+
+4. **Create Admin User**:
+   After deployment, run locally:
+   ```bash
+   MONGODB_URI=your_production_uri npm run create-admin
+   ```
+
+📖 **Detailed Deployment Guide**: See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete instructions.
+
+### Build for Production (Local)
 
 ```bash
 npm run build
@@ -148,9 +176,12 @@ npm start
 
 ### Environment Variables for Production
 
-Ensure all environment variables are set in your hosting platform:
-- Vercel: Add in Project Settings → Environment Variables
-- Other platforms: Follow their environment variable configuration
+Required environment variables:
+- `MONGODB_URI` - MongoDB connection string (required)
+- `JWT_SECRET` - Secret key for JWT access tokens (required)
+- `JWT_REFRESH_SECRET` - Secret key for JWT refresh tokens (required)
+- `JWT_EXPIRES_IN` - Access token expiration (optional, default: `15m`)
+- `JWT_REFRESH_EXPIRES_IN` - Refresh token expiration (optional, default: `7d`)
 
 ## 📝 Available Scripts
 
