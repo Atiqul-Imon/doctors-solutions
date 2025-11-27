@@ -53,52 +53,66 @@ export default function Services() {
 
   return (
     <div className="bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary-600 to-primary-700 text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Our Medical Services</h1>
-            <p className="text-xl text-gray-100 leading-relaxed">
-              Comprehensive healthcare services delivered with excellence, compassion, and the latest medical technology.
+      {/* Hero Section - Enhanced */}
+      <section className="section-padding bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wOCI+PHBhdGggZD0iTTM2IDM0djJoLTJ2LTJoMnptMC0yNHYyaC0ydi0yaDJ6bTI0IDI0djJoLTJ2LTJoMnptMC0yNHYyaC0ydi0yaDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30 animate-pulse-slow"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center animate-fade-in-up">
+            <div className="inline-block mb-4">
+              <span className="text-sm font-semibold text-white/90 uppercase tracking-wider">Our Services</span>
+            </div>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">Our Medical Services</h1>
+            <p className="text-lg md:text-xl text-primary-50 leading-relaxed max-w-3xl mx-auto">
+              Comprehensive healthcare services delivered with excellence, compassion, and the latest medical technology 
+              to ensure optimal patient care and outcomes.
             </p>
           </div>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-16 -mt-12 relative z-10">
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+      <div className="container mx-auto px-4 py-16 -mt-16 relative z-10">
+        {/* Services Grid - Enhanced */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
           {services.map((service, index) => (
             <Card 
-              key={index} 
-              className="p-8 hover:shadow-2xl hover:-translate-y-2 border-2 border-gray-100 bg-white transition-all duration-300 animate-scale-in"
+              key={index}
+              variant="elevated"
+              hover
+              className="p-8 lg:p-10 animate-scale-in group"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className={`${service.color} w-20 h-20 rounded-xl flex items-center justify-center mb-6 border-2`}>
+              <div className={`${service.color} w-20 h-20 rounded-xl flex items-center justify-center mb-6 border-2 shadow-md group-hover:scale-110 transition-transform duration-300`}>
                 {service.icon}
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-gray-900">{service.title}</h3>
-              <p className="text-gray-600 leading-relaxed mb-6">{service.description}</p>
-              <div className="space-y-3 mb-6">
+              <h3 className="text-2xl font-bold mb-4 text-gray-900 group-hover:text-primary-600 transition-colors">
+                {service.title}
+              </h3>
+              <p className="text-gray-600 leading-relaxed mb-6 text-sm md:text-base">
+                {service.description}
+              </p>
+              <div className="space-y-3 mb-8 pt-4 border-t border-gray-100">
                 {service.features.map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-primary-600 flex-shrink-0" />
-                    <span className="text-gray-700 text-sm">{feature}</span>
+                  <div key={idx} className="flex items-center gap-3 group/feature">
+                    <CheckCircle2 className="w-5 h-5 text-primary-600 flex-shrink-0 group-hover/feature:scale-110 transition-transform" />
+                    <span className="text-gray-700 text-sm md:text-base font-medium">{feature}</span>
                   </div>
                 ))}
               </div>
-              <Link href="/book-appointment" className="text-primary-600 font-semibold flex items-center group">
+              <Link href="/book-appointment" className="text-primary-600 font-semibold flex items-center group/link hover:text-primary-700 transition-colors">
                 Book Consultation
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 ml-2 group-hover/link:translate-x-2 transition-transform" />
               </Link>
             </Card>
           ))}
         </div>
 
-          {/* Additional Information Section */}
+          {/* Additional Information Section - Enhanced */}
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          <Card className="p-10 bg-gradient-to-br from-primary-50 to-primary-100 border-2 border-primary-200 animate-slide-in-left hover:scale-105 transition-transform duration-300">
-            <h3 className="text-3xl font-bold mb-4 text-gray-900">Why Choose Our Services?</h3>
+          <Card variant="elevated" hover className="p-10 lg:p-12 bg-gradient-to-br from-primary-50 to-primary-100/50 border-2 border-primary-200 animate-slide-in-left">
+            <div className="inline-block mb-4">
+              <span className="text-sm font-semibold text-primary-600 uppercase tracking-wider">Why Choose Us</span>
+            </div>
+            <h3 className="text-3xl lg:text-4xl font-bold mb-6 text-gray-900">Why Choose Our Services?</h3>
             <div className="space-y-4">
               {[
                 'Expert medical professionals with years of experience',
@@ -106,60 +120,69 @@ export default function Services() {
                 'Personalized treatment plans for each patient',
                 'Comprehensive care from diagnosis to recovery',
               ].map((item, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-6 h-6 text-primary-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700 leading-relaxed">{item}</span>
+                <div key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/50 transition-colors group">
+                  <CheckCircle2 className="w-6 h-6 text-primary-600 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                  <span className="text-gray-700 leading-relaxed text-sm md:text-base font-medium">{item}</span>
                 </div>
               ))}
             </div>
           </Card>
 
-          <Card className="p-10 bg-white border-2 border-gray-100 animate-slide-in-right hover:scale-105 transition-transform duration-300">
-            <h3 className="text-3xl font-bold mb-4 text-gray-900">Our Approach</h3>
-            <p className="text-gray-700 leading-relaxed mb-6">
+          <Card variant="elevated" hover className="p-10 lg:p-12 bg-white animate-slide-in-right">
+            <div className="inline-block mb-4">
+              <span className="text-sm font-semibold text-primary-600 uppercase tracking-wider">Our Approach</span>
+            </div>
+            <h3 className="text-3xl lg:text-4xl font-bold mb-6 text-gray-900">Our Approach</h3>
+            <p className="text-gray-700 leading-relaxed mb-8 text-sm md:text-base">
               We believe in providing comprehensive, patient-centered care that addresses not just the symptoms, 
               but the root cause of health issues. Our approach combines evidence-based medicine with a compassionate 
               understanding of each patient&apos;s unique needs.
             </p>
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-xl border border-gray-200">
               <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="text-3xl font-bold text-primary-600 mb-1">24/7</div>
-                  <div className="text-xs text-gray-600">Emergency Care</div>
+                <div className="p-4 rounded-lg hover:bg-white transition-colors">
+                  <div className="text-3xl lg:text-4xl font-bold bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-transparent mb-2">24/7</div>
+                  <div className="text-xs md:text-sm text-gray-600 font-medium">Emergency Care</div>
                 </div>
-                <div>
-                  <div className="text-3xl font-bold text-primary-600 mb-1">100%</div>
-                  <div className="text-xs text-gray-600">Confidential</div>
+                <div className="p-4 rounded-lg hover:bg-white transition-colors">
+                  <div className="text-3xl lg:text-4xl font-bold bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-transparent mb-2">100%</div>
+                  <div className="text-xs md:text-sm text-gray-600 font-medium">Confidential</div>
                 </div>
-                <div>
-                  <div className="text-3xl font-bold text-primary-600 mb-1">98%</div>
-                  <div className="text-xs text-gray-600">Satisfaction</div>
+                <div className="p-4 rounded-lg hover:bg-white transition-colors">
+                  <div className="text-3xl lg:text-4xl font-bold bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-transparent mb-2">98%</div>
+                  <div className="text-xs md:text-sm text-gray-600 font-medium">Satisfaction</div>
                 </div>
               </div>
             </div>
           </Card>
         </div>
 
-        {/* CTA Section */}
+        {/* CTA Section - Enhanced */}
         <div className="max-w-6xl mx-auto">
-          <Card className="p-12 bg-gradient-to-r from-primary-600 to-primary-700 text-white text-center shadow-xl">
-            <h3 className="text-3xl font-bold mb-4">Need More Information?</h3>
-            <p className="text-xl text-gray-100 mb-8 max-w-2xl mx-auto">
-              If you have questions about our services or would like to schedule a consultation, 
-              please don&apos;t hesitate to contact us. We&apos;re here to help you understand your options 
-              and find the best care for your needs.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button size="lg" variant="secondary" className="text-primary-600 px-8 py-4 text-lg">
-                  Contact Us
-                </Button>
-              </Link>
-              <Link href="/book-appointment">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white px-8 py-4 text-lg hover:bg-white/10">
-                  Book Appointment
-                </Button>
-              </Link>
+          <Card variant="gradient" className="p-12 lg:p-16 text-white text-center shadow-2xl relative overflow-hidden">
+            {/* Background decorations */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+            
+            <div className="relative z-10">
+              <h3 className="text-3xl lg:text-4xl font-bold mb-4">Need More Information?</h3>
+              <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">
+                If you have questions about our services or would like to schedule a consultation, 
+                please don&apos;t hesitate to contact us. We&apos;re here to help you understand your options 
+                and find the best care for your needs.
+              </p>
+              <div className="flex flex-wrap gap-4 justify-center">
+                <Link href="/contact">
+                  <Button size="xl" variant="secondary" className="text-primary-600 px-8 py-4 text-lg font-bold shadow-xl hover:shadow-2xl">
+                    Contact Us
+                  </Button>
+                </Link>
+                <Link href="/book-appointment">
+                  <Button size="xl" variant="outline" className="border-2 border-white text-white px-8 py-4 text-lg font-bold hover:bg-white/10">
+                    Book Appointment
+                  </Button>
+                </Link>
+              </div>
             </div>
           </Card>
         </div>

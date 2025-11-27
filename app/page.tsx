@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
+import Card from '@/components/ui/Card';
 import { Calendar, Clock, Stethoscope, Users, Award, Heart, Shield, CheckCircle2, ArrowRight, Plus, Star } from 'lucide-react';
 
 export default function Home() {
@@ -42,74 +43,103 @@ export default function Home() {
 
   return (
     <div>
-      {/* Hero Section - Matching the provided design */}
-      <section className="relative bg-gradient-to-r from-teal-500 via-cyan-600 to-blue-700 text-white min-h-[90vh] flex items-center overflow-hidden">
+      {/* Hero Section - Enhanced Professional Design */}
+      <section className="relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white min-h-[92vh] flex items-center overflow-hidden">
         {/* Animated background pattern */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzR2MmgtMnYtMmgyem0wLTI0djJoLTJ2LTJoMnptMjQgMjR2MmgtMnYtMmgyem0wLTI0djJoLTJ2LTJoMnYiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20 animate-pulse-slow"></div>
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wOCI+PHBhdGggZD0iTTM2IDM0djJoLTJ2LTJoMnptMC0yNHYyaC0ydi0yaDJ6bTI0IDI0djJoLTJ2LTJoMnptMC0yNHYyaC0ydi0yaDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30 animate-pulse-slow"></div>
+        
+        {/* Decorative gradient circles */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-400/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-medical-teal/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
         
         <div className="container mx-auto px-4 py-16 lg:py-24 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
             {/* Left Content */}
             <div className="space-y-8 animate-fade-in-up">
               {/* Accepting New Patients Badge */}
-              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30 animate-fade-in">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium">Accepting New Patients</span>
+              <div className="inline-flex items-center gap-2 glass px-5 py-2.5 rounded-full border border-white/30 animate-fade-in hover:scale-105 transition-transform">
+                <div className="w-2.5 h-2.5 bg-medical-green rounded-full animate-pulse shadow-lg shadow-medical-green/50"></div>
+                <span className="text-sm font-semibold">Accepting New Patients</span>
               </div>
 
               {/* Main Headline */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                 Compassionate Care,{' '}
-                <span className="text-yellow-300">Exceptional</span> Health
+                <span className="text-yellow-300 drop-shadow-lg">Exceptional</span> Health
               </h1>
 
               {/* Description */}
-              <p className="text-xl md:text-2xl text-cyan-50 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                Board-certified internal medicine physician with 15+ years of experience in comprehensive medical care.
+              <p className="text-lg md:text-xl lg:text-2xl text-primary-50 leading-relaxed max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                Board-certified internal medicine physician with 15+ years of experience dedicated to providing comprehensive, personalized medical care.
               </p>
 
-              {/* CTA Button */}
-              <div className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap gap-4 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
                 <Link href="/book-appointment">
-                  <Button size="lg" variant="secondary" className="text-blue-700 text-lg px-8 py-4 shadow-xl hover:shadow-2xl">
-                    <Calendar className="w-5 h-5 inline mr-2" />
+                  <Button size="lg" variant="secondary" className="text-primary-600 text-base px-8 py-4 shadow-xl hover:shadow-2xl font-semibold">
+                    <Calendar className="w-5 h-5" />
                     Book Appointment
+                  </Button>
+                </Link>
+                <Link href="/about">
+                  <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 px-8 py-4 text-base font-semibold">
+                    Learn More
                   </Button>
                 </Link>
               </div>
 
               {/* Statistics Row */}
-              <div className="grid grid-cols-4 gap-6 pt-8 border-t border-white/20 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+              <div className="grid grid-cols-4 gap-4 lg:gap-6 pt-8 border-t border-white/20 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
                 {stats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-3xl md:text-4xl font-bold mb-1">{stat.value}</div>
-                    <div className="text-sm text-cyan-100">{stat.label}</div>
+                  <div key={index} className="text-center group">
+                    <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 bg-gradient-to-b from-white to-primary-100 bg-clip-text text-transparent group-hover:scale-110 transition-transform">
+                      {stat.value}
+                    </div>
+                    <div className="text-xs md:text-sm text-primary-100 font-medium">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Right Side - Doctor Card */}
+            {/* Right Side - Enhanced Doctor Card */}
             <div className="flex justify-center lg:justify-end animate-scale-in" style={{ animationDelay: '0.3s' }}>
               <div className="relative">
-                <div className="bg-blue-800 rounded-3xl p-12 shadow-2xl max-w-md w-full transform hover:scale-105 transition-transform duration-300">
-                  {/* Medical Cross Icon */}
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-primary-400/30 rounded-3xl blur-2xl transform scale-110"></div>
+                
+                <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-3xl p-10 lg:p-12 shadow-2xl max-w-md w-full transform hover:scale-105 transition-all duration-300 border border-white/20">
+                  {/* Medical Icon */}
                   <div className="flex justify-center mb-6">
-                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30 shadow-lg animate-float">
                       <Plus className="w-16 h-16 text-white" strokeWidth={3} />
                     </div>
                   </div>
                   
                   {/* Doctor Name */}
-                  <h2 className="text-3xl font-bold text-center mb-2 text-white">Dr. [Name]</h2>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-center mb-2 text-white">Dr. [Name]</h2>
                   
                   {/* Specialty */}
-                  <p className="text-center text-cyan-200 mb-8 text-lg">Internal Medicine</p>
+                  <p className="text-center text-primary-100 mb-6 text-lg font-medium">Internal Medicine</p>
                   
-                  {/* MD Badge */}
-                  <div className="flex justify-center">
-                    <div className="bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full border border-white/30">
-                      <span className="text-white font-semibold">MD</span>
+                  {/* Credentials & Badge */}
+                  <div className="space-y-4">
+                    <div className="flex justify-center gap-2 flex-wrap">
+                      <div className="glass px-4 py-2 rounded-full border border-white/30">
+                        <span className="text-white font-semibold text-sm">MD</span>
+                      </div>
+                      <div className="glass px-4 py-2 rounded-full border border-white/30">
+                        <span className="text-white font-semibold text-sm">Board Certified</span>
+                      </div>
+                    </div>
+                    
+                    {/* Rating */}
+                    <div className="flex items-center justify-center gap-2 pt-2">
+                      <div className="flex gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-5 h-5 fill-yellow-300 text-yellow-300" />
+                        ))}
+                      </div>
+                      <span className="text-white/90 font-semibold">5.0 Rating</span>
                     </div>
                   </div>
                 </div>
@@ -119,61 +149,73 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Bar */}
-      <section className="bg-white border-b border-gray-100 -mt-16 relative z-10 shadow-lg">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {/* Features Bar - Enhanced */}
+      <section className="bg-white border-b border-gray-200 -mt-16 relative z-10 shadow-elevated">
+        <div className="container mx-auto px-4 py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
             {features.map((feature, index) => (
               <div 
                 key={index} 
-                className="flex items-center gap-3 animate-fade-in-up hover:scale-105 transition-transform duration-300"
+                className="flex flex-col md:flex-row items-center md:items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-all duration-300 animate-fade-in-up group"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="bg-primary-50 text-primary-600 p-3 rounded-lg">
+                <div className="bg-gradient-to-br from-primary-50 to-primary-100 text-primary-600 p-4 rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm">
                   {feature.icon}
                 </div>
-                <span className="font-semibold text-gray-800">{feature.text}</span>
+                <div className="text-center md:text-left">
+                  <span className="font-bold text-gray-900 block">{feature.text}</span>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="py-20 bg-gray-50">
+      {/* Services Section - Enhanced */}
+      <section className="section-padding bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in-up">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Our Medical Services</h2>
-            <div className="w-24 h-1 bg-primary-600 mx-auto mb-6"></div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Comprehensive healthcare services designed to meet your unique medical needs with excellence and compassion.
+            <div className="inline-block mb-4">
+              <span className="text-sm font-semibold text-primary-600 uppercase tracking-wider">Our Services</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900">Medical Services</h2>
+            <div className="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-medical-teal mx-auto mb-6 rounded-full"></div>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Comprehensive healthcare services designed to meet your unique medical needs with excellence, 
+              cutting-edge technology, and compassionate care.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {services.map((service, index) => (
-              <div 
+              <Card 
                 key={index} 
-                className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 animate-scale-in"
+                variant="elevated"
+                hover
+                className="p-8 animate-scale-in group"
                 style={{ animationDelay: `${index * 0.15}s` }}
               >
-                <div className={`${service.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6`}>
+                <div className={`${service.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 shadow-md group-hover:scale-110 transition-transform duration-300`}>
                   {service.icon}
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-gray-900">{service.title}</h3>
-                <p className="text-gray-600 leading-relaxed mb-6">{service.description}</p>
-                <Link href="/services" className="text-primary-600 font-semibold flex items-center group">
+                <h3 className="text-2xl font-bold mb-4 text-gray-900 group-hover:text-primary-600 transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed mb-6 text-sm md:text-base">
+                  {service.description}
+                </p>
+                <Link href="/services" className="text-primary-600 font-semibold flex items-center group/link">
                   Learn More
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover/link:translate-x-2 transition-transform" />
                 </Link>
-              </div>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="py-20 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-cyan-50/50"></div>
+      {/* Why Choose Us Section - Enhanced */}
+      <section className="section-padding bg-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-medical-teal/10"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
             <div className="animate-slide-in-left">
@@ -223,64 +265,93 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials/Reviews Section */}
-      <section className="py-20 bg-gray-50">
+      {/* Testimonials/Reviews Section - Enhanced */}
+      <section className="section-padding bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in-up">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">What Our Patients Say</h2>
-            <div className="w-24 h-1 bg-primary-600 mx-auto mb-6"></div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Real feedback from patients who trust us with their health
+            <div className="inline-block mb-4">
+              <span className="text-sm font-semibold text-primary-600 uppercase tracking-wider">Testimonials</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900">What Our Patients Say</h2>
+            <div className="w-24 h-1.5 bg-gradient-to-r from-primary-500 to-medical-teal mx-auto mb-6 rounded-full"></div>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Real feedback from patients who trust us with their health and wellbeing
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {[
-              { name: 'John Doe', rating: 5, comment: 'Exceptional care and attention. Dr. [Name] is truly dedicated to patient wellbeing.' },
-              { name: 'Sarah Smith', rating: 5, comment: 'Professional, compassionate, and thorough. Highly recommend this practice.' },
-              { name: 'Michael Johnson', rating: 5, comment: 'The best medical care I\'ve ever received. Outstanding service and expertise.' },
+              { name: 'John Doe', rating: 5, comment: 'Exceptional care and attention. Dr. [Name] is truly dedicated to patient wellbeing. The best medical experience I\'ve had.', date: '2 months ago' },
+              { name: 'Sarah Smith', rating: 5, comment: 'Professional, compassionate, and thorough. Highly recommend this practice. The staff is amazing and the care is top-notch.', date: '1 month ago' },
+              { name: 'Michael Johnson', rating: 5, comment: 'The best medical care I\'ve ever received. Outstanding service and expertise. I feel truly cared for here.', date: '3 weeks ago' },
             ].map((testimonial, index) => (
-              <div 
+              <Card 
                 key={index}
-                className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 animate-fade-in-up"
+                variant="elevated"
+                hover
+                className="p-8 animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
-                <div className="flex gap-1 mb-4">
+                <div className="flex items-center gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                   ))}
+                  <span className="ml-2 text-xs text-gray-500">{testimonial.date}</span>
                 </div>
-                <p className="text-gray-700 mb-6 leading-relaxed italic">&quot;{testimonial.comment}&quot;</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-                    <span className="text-primary-600 font-bold">{testimonial.name[0]}</span>
+                <p className="text-gray-700 mb-6 leading-relaxed italic text-sm md:text-base">
+                  &quot;{testimonial.comment}&quot;
+                </p>
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                  <div className="w-12 h-12 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center shadow-sm">
+                    <span className="text-primary-600 font-bold text-lg">{testimonial.name[0]}</span>
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                    <div className="text-sm text-gray-500">Patient</div>
+                    <div className="font-bold text-gray-900">{testimonial.name}</div>
+                    <div className="text-sm text-gray-500">Verified Patient</div>
                   </div>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-700 text-white relative overflow-hidden">
+      {/* CTA Section - Enhanced */}
+      <section className="section-padding bg-gradient-medical text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzR2MmgtMnYtMmgyem0wLTI0djJoLTJ2LTJoMnptMjQgMjR2MmgtMnYtMmgyem0wLTI0djJoLTJ2LTJoMnYiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-10 animate-pulse-slow"></div>
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+        
         <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="max-w-3xl mx-auto animate-fade-in-up">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Schedule Your Visit?</h2>
-            <p className="text-xl mb-10 text-cyan-50 max-w-2xl mx-auto leading-relaxed">
+          <div className="max-w-4xl mx-auto animate-fade-in-up">
+            <div className="inline-block mb-4">
+              <span className="text-sm font-semibold text-white/90 uppercase tracking-wider">Get Started Today</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+              Ready to Schedule Your Visit?
+            </h2>
+            <p className="text-lg md:text-xl mb-10 text-white/90 max-w-2xl mx-auto leading-relaxed">
               Take the first step towards better health. Book your appointment online today and experience 
-              exceptional medical care tailored to your needs.
+              exceptional medical care tailored to your unique needs.
             </p>
-            <Link href="/book-appointment">
-              <Button size="lg" variant="secondary" className="text-blue-700 text-lg px-10 py-4 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
-                Book Appointment Now
-                <Calendar className="w-5 h-5 inline ml-2" />
-              </Button>
-            </Link>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link href="/book-appointment">
+                <Button size="xl" variant="secondary" className="text-primary-600 text-lg px-10 py-4 shadow-xl hover:shadow-2xl font-bold">
+                  Book Appointment Now
+                  <Calendar className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button size="xl" variant="outline" className="border-2 border-white text-white hover:bg-white/10 text-lg px-10 py-4 font-bold">
+                  Contact Us
+                </Button>
+              </Link>
+            </div>
+            <div className="mt-12 pt-8 border-t border-white/20">
+              <p className="text-white/80 text-sm">
+                <span className="font-semibold">Appointments Available This Week</span> • Same-day appointments available • Insurance accepted
+              </p>
+            </div>
           </div>
         </div>
       </section>
