@@ -34,8 +34,9 @@ async function handler(req: NextRequest) {
       ]),
       // Patient count
       Patient.countDocuments(),
-      // Recent appointments (parallel query)
+      // Recent appointments (parallel query) - use projection
       Appointment.find()
+        .select('patientId date time status reason createdAt')
         .populate('patientId', 'name email phone')
         .sort({ createdAt: -1 })
         .limit(10)
@@ -49,7 +50,7 @@ async function handler(req: NextRequest) {
     const confirmedAppointments = stats.confirmed[0]?.count || 0;
     const todayAppointments = stats.today[0]?.count || 0;
 
-    return NextResponse.json<ApiResponse>({
+    const response = NextResponse.json<ApiResponse>({
       success: true,
       data: {
         stats: {
@@ -62,6 +63,11 @@ async function handler(req: NextRequest) {
         recentAppointments,
       },
     });
+
+    // Add caching headers (1 minute cache for dashboard - data changes frequently)
+    response.headers.set('Cache-Control', 'private, max-age=60, stale-while-revalidate=120');
+    
+    return response;
   } catch (error: any) {
     console.error('Dashboard error:', error);
     return NextResponse.json<ApiResponse>(

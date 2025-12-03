@@ -13,6 +13,8 @@ export async function GET(
       await connectDB();
       const { id } = await context.params;
 
+      // Use projection to exclude large arrays if not needed (can be fetched separately)
+      // For now, fetch all fields but consider optimizing based on usage
       const patient = await Patient.findById(id).lean();
 
       if (!patient) {
@@ -25,10 +27,15 @@ export async function GET(
         );
       }
 
-      return NextResponse.json<ApiResponse>({
+      const response = NextResponse.json<ApiResponse>({
         success: true,
         data: patient,
       });
+
+      // Add caching headers (5 minutes cache for patient data)
+      response.headers.set('Cache-Control', 'private, max-age=300, stale-while-revalidate=600');
+      
+      return response;
     } catch (error: any) {
       console.error('Get patient error:', error);
       return NextResponse.json<ApiResponse>(

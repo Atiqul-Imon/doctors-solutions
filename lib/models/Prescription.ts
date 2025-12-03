@@ -11,6 +11,7 @@ export interface IPrescription extends Document {
     dosage: string;
     frequency: string;
     duration: string; // e.g., "7 days", "2 weeks", "1 month"
+    mealTiming?: 'before' | 'during' | 'after'; // খাওয়ার আগে/মধ্যে/পরে
     instructions?: string; // Additional instructions for this medication
     _id?: mongoose.Types.ObjectId;
   }>;
@@ -76,6 +77,11 @@ const PrescriptionSchema: Schema = new Schema(
           required: [true, 'Duration is required'],
           trim: true,
         },
+        mealTiming: {
+          type: String,
+          enum: ['before', 'during', 'after'],
+          trim: true,
+        },
         instructions: {
           type: String,
           trim: true,
@@ -114,16 +120,18 @@ const PrescriptionSchema: Schema = new Schema(
   }
 );
 
-// Indexes
-PrescriptionSchema.index({ patientId: 1 });
-PrescriptionSchema.index({ prescriptionNumber: 1 });
+// Single field indexes
+// Note: prescriptionNumber already has unique: true in schema definition
 PrescriptionSchema.index({ prescriptionDate: 1 });
 PrescriptionSchema.index({ status: 1 });
-PrescriptionSchema.index({ patientId: 1, prescriptionDate: -1 });
-// Composite index for common query pattern: patient prescriptions filtered by status
-PrescriptionSchema.index({ patientId: 1, status: 1, prescriptionDate: -1 });
-// Index for date range queries with status filter
-PrescriptionSchema.index({ prescriptionDate: -1, status: 1 });
+PrescriptionSchema.index({ createdAt: -1 }); // For sorting recent prescriptions
+
+// Composite indexes for common query patterns
+PrescriptionSchema.index({ patientId: 1 }); // For patient's prescriptions
+PrescriptionSchema.index({ patientId: 1, prescriptionDate: -1 }); // Patient prescriptions sorted by date
+PrescriptionSchema.index({ patientId: 1, status: 1, prescriptionDate: -1 }); // Patient prescriptions filtered by status
+PrescriptionSchema.index({ prescriptionDate: -1, status: 1 }); // Date range queries with status filter
+PrescriptionSchema.index({ patientId: 1, status: 1 }); // Patient prescriptions by status only
 
 // Auto-generate prescription number before validation
 PrescriptionSchema.pre('validate', async function (next) {

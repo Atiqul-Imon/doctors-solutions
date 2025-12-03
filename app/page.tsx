@@ -316,7 +316,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section - Enhanced */}
-      <section className="section-padding bg-gradient-medical text-white relative overflow-hidden">
+      <section className="pt-20 md:pt-24 lg:pt-32 pb-0 bg-gradient-medical text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzR2MmgtMnYtMmgyem0wLTI0djJoLTJ2LTJoMnptMjQgMjR2MmgtMnYtMmgyem0wLTI0djJoLTJ2LTJoMnYiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-10 animate-pulse-slow"></div>
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
@@ -347,7 +347,7 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
-            <div className="mt-12 pt-8 border-t border-white/20">
+            <div className="mt-12 pt-8 pb-20 border-t border-white/20">
               <p className="text-white/80 text-sm">
                 <span className="font-semibold">Appointments Available This Week</span> • Same-day appointments available • Insurance accepted
               </p>

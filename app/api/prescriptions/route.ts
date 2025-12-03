@@ -38,16 +38,21 @@ export async function GET(req: NextRequest) {
 
       const skip = (page - 1) * limit;
 
+      // Use projection to only fetch needed fields
       const prescriptions = await Prescription.find(filter)
+        .select('prescriptionNumber patientId prescribedBy prescriptionDate medications status refillable expiryDate createdAt')
         .populate('patientId', 'name email phone')
         .sort({ prescriptionDate: -1 })
         .skip(skip)
         .limit(limit)
         .lean();
 
-      const total = await Prescription.countDocuments(filter);
+      // Use estimatedDocumentCount for faster count when no filter
+      const total = Object.keys(filter).length === 0
+        ? await Prescription.estimatedDocumentCount()
+        : await Prescription.countDocuments(filter);
 
-      return NextResponse.json<ApiResponse>({
+      const response = NextResponse.json<ApiResponse>({
         success: true,
         data: {
           prescriptions,
@@ -59,6 +64,11 @@ export async function GET(req: NextRequest) {
           },
         },
       });
+
+      // Add caching headers for GET requests (5 minutes cache)
+      response.headers.set('Cache-Control', 'private, max-age=300, stale-while-revalidate=600');
+      
+      return response;
     } catch (error: any) {
       console.error('Get prescriptions error:', error);
       return NextResponse.json<ApiResponse>(

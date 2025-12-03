@@ -30,6 +30,8 @@ yarn-error.log*
 
 # PDFKit fonts (copied during build)
 /public/fonts/pdfkit/*.afm
+/public/fonts/kalpurush/*.ttf
+/public/fonts/kalpurush/*.TTF
 
 # vercel
 .vercel

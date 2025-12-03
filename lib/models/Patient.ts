@@ -237,9 +237,25 @@ const PatientSchema: Schema = new Schema(
   }
 );
 
-PatientSchema.index({ email: 1 }, { sparse: true }); // Sparse index since email is optional
-PatientSchema.index({ phone: 1 });
+// Single field indexes
+// Note: Email is covered by text index below, no need for separate index
+PatientSchema.index({ phone: 1 }, { unique: true }); // Phone is required and should be unique
 PatientSchema.index({ name: 1 });
+PatientSchema.index({ createdAt: -1 }); // For sorting by creation date
+
+// Composite indexes for common query patterns
+PatientSchema.index({ name: 1, phone: 1 }); // For patient lookup by name and phone
+PatientSchema.index({ phone: 1, email: 1 }, { sparse: true }); // For duplicate checking (email lookup)
+
+// Text index for full-text search across name, email, and phone
+PatientSchema.index({ 
+  name: 'text', 
+  email: 'text', 
+  phone: 'text' 
+}, { 
+  weights: { name: 10, phone: 5, email: 3 }, // Prioritize name matches
+  name: 'patient_search_text_index'
+});
 
 const Patient: Model<IPatient> = mongoose.models.Patient || mongoose.model<IPatient>('Patient', PatientSchema);
 

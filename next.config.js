@@ -10,6 +10,14 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+  // Performance optimizations
+  compress: true, // Enable gzip compression
+  poweredByHeader: false, // Remove X-Powered-By header for security
+  // Optimize images
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60,
+  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       // Ensure PDFKit fonts are accessible in server build

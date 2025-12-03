@@ -17,7 +17,35 @@ export async function GET(req: NextRequest) {
 
       const filter: any = {};
 
+      // Optimize search: Use text index if available, fallback to regex
       if (search) {
+        // Try text search first (faster with text index)
+        const textSearchResults = await Patient.find(
+          { $text: { $search: search } },
+          { score: { $meta: 'textScore' } }
+        )
+          .sort({ score: { $meta: 'textScore' } })
+          .limit(limit)
+          .lean();
+        
+        if (textSearchResults.length > 0) {
+          // Use text search results
+          const total = await Patient.countDocuments({ $text: { $search: search } });
+          return NextResponse.json<ApiResponse>({
+            success: true,
+            data: {
+              patients: textSearchResults,
+              pagination: {
+                page: 1,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+              },
+            },
+          });
+        }
+        
+        // Fallback to regex search if text search returns no results
         filter.$or = [
           { name: { $regex: search, $options: 'i' } },
           { email: { $regex: search, $options: 'i' } },
@@ -27,13 +55,18 @@ export async function GET(req: NextRequest) {
 
       const skip = (page - 1) * limit;
 
+      // Use projection to only fetch needed fields (reduces data transfer)
       const patients = await Patient.find(filter)
+        .select('name email phone dateOfBirth gender bloodGroup address createdAt')
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .lean();
 
-      const total = await Patient.countDocuments(filter);
+      // Use estimatedDocumentCount for faster count when no filter, otherwise countDocuments
+      const total = search 
+        ? await Patient.countDocuments(filter)
+        : await Patient.estimatedDocumentCount();
 
       return NextResponse.json<ApiResponse>({
         success: true,

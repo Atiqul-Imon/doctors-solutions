@@ -31,16 +31,21 @@ export async function GET(req: NextRequest) {
 
     const skip = (page - 1) * limit;
 
+    // Use projection to only fetch needed fields
     const appointments = await Appointment.find(filter)
+      .select('patientId date time duration status reason notes createdAt')
       .populate('patientId', 'name email phone')
       .sort({ date: 1, time: 1 })
       .skip(skip)
       .limit(limit)
       .lean();
 
-    const total = await Appointment.countDocuments(filter);
+    // Use estimatedDocumentCount for faster count when no filter
+    const total = Object.keys(filter).length === 0
+      ? await Appointment.estimatedDocumentCount()
+      : await Appointment.countDocuments(filter);
 
-    return NextResponse.json<ApiResponse>({
+    const response = NextResponse.json<ApiResponse>({
       success: true,
       data: {
         appointments,
@@ -52,6 +57,11 @@ export async function GET(req: NextRequest) {
         },
       },
     });
+
+    // Add caching headers for GET requests (5 minutes cache)
+    response.headers.set('Cache-Control', 'private, max-age=300, stale-while-revalidate=600');
+    
+    return response;
   } catch (error: any) {
     console.error('Get appointments error:', error);
     return NextResponse.json<ApiResponse>(

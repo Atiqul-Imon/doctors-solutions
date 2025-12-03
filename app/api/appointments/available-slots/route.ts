@@ -61,10 +61,13 @@ export async function GET(req: NextRequest) {
     const endOfDay = new Date(selectedDate);
     endOfDay.setHours(23, 59, 59, 999);
 
+    // Use lean() and select only time field for better performance
     const bookedAppointments = await Appointment.find({
       date: { $gte: startOfDay, $lte: endOfDay },
       status: { $in: ['pending', 'confirmed'] },
-    }).select('time');
+    })
+      .select('time')
+      .lean();
 
     const bookedTimes = new Set(bookedAppointments.map((apt) => apt.time));
 
@@ -88,10 +91,15 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    return NextResponse.json<ApiResponse>({
+    const response = NextResponse.json<ApiResponse>({
       success: true,
       data: { slots },
     });
+
+    // Add caching headers (10 minutes cache for available slots - they change frequently)
+    response.headers.set('Cache-Control', 'private, max-age=600, stale-while-revalidate=300');
+    
+    return response;
   } catch (error: any) {
     console.error('Get available slots error:', error);
     return NextResponse.json<ApiResponse>(

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import Prescription from '@/lib/models/Prescription';
+import DoctorSettings from '@/lib/models/DoctorSettings';
 import { withAuth } from '@/lib/auth/middleware';
 import { generatePrescriptionPDF } from '@/lib/services/prescriptionPdf';
 import { ApiResponse } from '@/types';
@@ -14,7 +15,9 @@ export async function GET(
       await connectDB();
       const { id } = await context.params;
 
+      // Use projection to only fetch needed fields for PDF generation
       const prescription = await Prescription.findById(id)
+        .select('prescriptionNumber patientId prescribedBy prescriptionDate medications additionalInstructions notes')
         .populate('patientId', 'name email phone dateOfBirth gender bloodGroup address')
         .lean();
 
@@ -61,9 +64,15 @@ export async function GET(
         );
       }
 
-      // Generate PDF
+      // Fetch doctor settings - use lean() and select only needed fields
+      const doctorSettings = await DoctorSettings.findOne()
+        .select('doctorNameEn doctorNameBn qualifications specialization specialties affiliation consultationHours clinicName clinicAddress clinicPhones clinicEmail logoText logoTagline followUpInstructions chamberName chamberAddress chamberPhones watermarkText')
+        .lean();
+
+      // Generate PDF with doctor settings
       const pdfBuffer = await generatePrescriptionPDF({
         prescription,
+        doctorSettings: doctorSettings || undefined,
       });
 
       if (!pdfBuffer || pdfBuffer.length === 0) {

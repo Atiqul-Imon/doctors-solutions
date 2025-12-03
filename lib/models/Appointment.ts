@@ -62,14 +62,18 @@ const AppointmentSchema: Schema = new Schema(
   }
 );
 
+// Single field indexes
 AppointmentSchema.index({ patientId: 1 });
 AppointmentSchema.index({ date: 1 });
 AppointmentSchema.index({ status: 1 });
-AppointmentSchema.index({ date: 1, time: 1 });
-// Composite index for common query pattern: finding appointments by date, time, and status
-AppointmentSchema.index({ date: 1, time: 1, status: 1 });
-// Index for date range queries with status filter
-AppointmentSchema.index({ date: 1, status: 1 });
+AppointmentSchema.index({ createdAt: -1 }); // For sorting recent appointments
+
+// Composite indexes for common query patterns
+AppointmentSchema.index({ date: 1, time: 1 }); // For time slot queries
+AppointmentSchema.index({ date: 1, time: 1, status: 1 }); // For conflict checking
+AppointmentSchema.index({ date: 1, status: 1 }); // For date range with status filter
+AppointmentSchema.index({ patientId: 1, date: -1 }); // For patient's appointment history
+AppointmentSchema.index({ patientId: 1, status: 1 }); // For patient's appointments by status
 
 const Appointment: Model<IAppointment> = mongoose.models.Appointment || mongoose.model<IAppointment>('Appointment', AppointmentSchema);
 

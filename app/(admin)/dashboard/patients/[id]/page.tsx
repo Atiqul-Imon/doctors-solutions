@@ -405,7 +405,7 @@ export default function PatientDetailPage() {
       ...prescriptionFormData,
       medications: [
         ...prescriptionFormData.medications,
-        { name: '', dosage: '', frequency: '', duration: '', instructions: '' },
+        { name: '', dosage: '', frequency: '', duration: '', mealTiming: '', instructions: '' },
       ],
     });
   };
@@ -1997,6 +1997,24 @@ export default function PatientDetailPage() {
                               required
                             />
                           </div>
+                          <div>
+                            <label className="block text-sm font-medium mb-1">
+                              খাওয়ার সময় (Meal Timing) *
+                            </label>
+                            <select
+                              value={med.mealTiming || ''}
+                              onChange={(e) =>
+                                updateMedicationInPrescription(index, 'mealTiming', e.target.value)
+                              }
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                              required
+                            >
+                              <option value="">Select meal timing</option>
+                              <option value="before">খাওয়ার আগে (Before Meal)</option>
+                              <option value="during">খাওয়ার মধ্যে (During Meal)</option>
+                              <option value="after">খাওয়ার পরে (After Meal)</option>
+                            </select>
+                          </div>
                           <div className="col-span-2">
                             <label className="block text-sm font-medium mb-1">
                               Instructions
@@ -2215,6 +2233,16 @@ export default function PatientDetailPage() {
                           <p className="text-sm text-gray-600">Duration</p>
                           <p className="font-medium">{med.duration}</p>
                         </div>
+                        {med.mealTiming && (
+                          <div>
+                            <p className="text-sm text-gray-600">খাওয়ার সময় (Meal Timing)</p>
+                            <p className="font-medium">
+                              {med.mealTiming === 'before' && 'খাওয়ার আগে (Before Meal)'}
+                              {med.mealTiming === 'during' && 'খাওয়ার মধ্যে (During Meal)'}
+                              {med.mealTiming === 'after' && 'খাওয়ার পরে (After Meal)'}
+                            </p>
+                          </div>
+                        )}
                         {med.instructions && (
                           <div className="col-span-2">
                             <p className="text-sm text-gray-600">Instructions</p>

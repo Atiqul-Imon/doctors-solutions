@@ -59,8 +59,10 @@ const ScheduleSchema: Schema = new Schema(
   }
 );
 
-ScheduleSchema.index({ dayOfWeek: 1, isRecurring: 1 });
-ScheduleSchema.index({ dateSpecific: 1, isRecurring: 1 });
+// Composite indexes for common query patterns
+ScheduleSchema.index({ dayOfWeek: 1, isRecurring: 1, isAvailable: 1 }); // For recurring schedule lookup
+ScheduleSchema.index({ dateSpecific: 1, isRecurring: 1 }); // For date-specific schedule lookup
+ScheduleSchema.index({ isRecurring: 1, isAvailable: 1 }); // For filtering available schedules
 
 const Schedule: Model<ISchedule> = mongoose.models.Schedule || mongoose.model<ISchedule>('Schedule', ScheduleSchema);
 

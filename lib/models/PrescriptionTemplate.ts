@@ -8,6 +8,7 @@ export interface IPrescriptionTemplate extends Document {
     dosage: string;
     frequency: string;
     duration: string;
+    mealTiming?: 'before' | 'during' | 'after'; // খাওয়ার আগে/মধ্যে/পরে
     instructions?: string;
     _id?: mongoose.Types.ObjectId;
   }>;
@@ -50,6 +51,11 @@ const PrescriptionTemplateSchema: Schema = new Schema(
         duration: {
           type: String,
           required: [true, 'Duration is required'],
+          trim: true,
+        },
+        mealTiming: {
+          type: String,
+          enum: ['before', 'during', 'after'],
           trim: true,
         },
         instructions: {
