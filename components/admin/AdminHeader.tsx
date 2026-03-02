@@ -24,11 +24,11 @@ export default function AdminHeader({ onMenuToggle }: { onMenuToggle?: () => voi
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
+    <header className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-30 shadow-sm will-change-transform">
       <div className="px-4 lg:px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           {/* Left: Menu toggle for mobile */}
-          <div className="flex items-center gap-4 flex-1">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
             {onMenuToggle && (
               <button
                 onClick={onMenuToggle}
@@ -40,7 +40,7 @@ export default function AdminHeader({ onMenuToggle }: { onMenuToggle?: () => voi
             )}
             
             {/* Global Search Bar */}
-            <div className="hidden md:block flex-1">
+            <div className="hidden md:block flex-1 min-w-0">
               <GlobalSearch />
             </div>
           </div>
@@ -62,7 +62,7 @@ export default function AdminHeader({ onMenuToggle }: { onMenuToggle?: () => voi
                 <div className="text-xs text-gray-500">Administrator</div>
               </div>
               
-              <div className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center font-semibold">
+              <div className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">
                 {user?.email?.[0]?.toUpperCase() || 'A'}
               </div>
               
