@@ -11,6 +11,11 @@ export interface IAppointment extends Document {
   createdAt: Date;
   confirmedAt?: Date;
   cancelledAt?: Date;
+  // Queue management fields
+  arrivedAt?: Date;
+  consultationStartedAt?: Date;
+  consultationEndedAt?: Date;
+  queuePosition?: number;
 }
 
 const AppointmentSchema: Schema = new Schema(
@@ -55,6 +60,19 @@ const AppointmentSchema: Schema = new Schema(
     },
     cancelledAt: {
       type: Date,
+    },
+    arrivedAt: {
+      type: Date,
+    },
+    consultationStartedAt: {
+      type: Date,
+    },
+    consultationEndedAt: {
+      type: Date,
+    },
+    queuePosition: {
+      type: Number,
+      default: 0,
     },
   },
   {

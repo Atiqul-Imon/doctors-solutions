@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Bell, Search, User, LogOut, Menu, X } from 'lucide-react';
+import { Bell, User, LogOut, Menu } from 'lucide-react';
+import GlobalSearch from '@/components/common/GlobalSearch';
 
 export default function AdminHeader({ onMenuToggle }: { onMenuToggle?: () => void }) {
   const router = useRouter();
@@ -25,32 +26,27 @@ export default function AdminHeader({ onMenuToggle }: { onMenuToggle?: () => voi
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
       <div className="px-4 lg:px-6 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           {/* Left: Menu toggle for mobile */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-1">
             {onMenuToggle && (
               <button
                 onClick={onMenuToggle}
-                className="lg:hidden text-gray-700 hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                className="lg:hidden text-gray-700 hover:bg-gray-100 p-2 rounded-lg transition-colors flex-shrink-0"
                 aria-label="Toggle menu"
               >
                 <Menu size={24} />
               </button>
             )}
             
-            {/* Search Bar */}
-            <div className="hidden md:flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 min-w-[300px]">
-              <Search className="w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search appointments, patients..."
-                className="bg-transparent border-none outline-none text-sm flex-1 text-gray-700 placeholder-gray-400"
-              />
+            {/* Global Search Bar */}
+            <div className="hidden md:block flex-1">
+              <GlobalSearch />
             </div>
           </div>
 
           {/* Right: User actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-shrink-0">
             {/* Notifications */}
             <button className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
               <Bell className="w-5 h-5" />
@@ -79,6 +75,11 @@ export default function AdminHeader({ onMenuToggle }: { onMenuToggle?: () => voi
               </button>
             </div>
           </div>
+        </div>
+        
+        {/* Mobile Search */}
+        <div className="md:hidden mt-4">
+          <GlobalSearch />
         </div>
       </div>
     </header>

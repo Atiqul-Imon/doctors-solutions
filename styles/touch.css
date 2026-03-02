@@ -1,0 +1,237 @@
+/* Touch-friendly enhancements for mobile/tablet */
+
+/* Minimum touch target size (48x48px as per Material Design guidelines) */
+.touch-target {
+  min-width: 48px;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Remove tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth scrolling with momentum on iOS */
+.smooth-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
+
+/* Prevent pull-to-refresh on mobile */
+body {
+  overscroll-behavior-y: contain;
+}
+
+/* Touch-friendly buttons */
+button, a, input[type="button"], input[type="submit"] {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Increase touch area for small icons */
+.touch-icon {
+  padding: 12px;
+  margin: -12px;
+}
+
+/* Prevent zoom on double-tap */
+button, a {
+  touch-action: manipulation;
+}
+
+/* Smooth transitions for touch interactions */
+.touch-transition {
+  transition: transform 0.1s ease-out, background-color 0.15s ease-out;
+}
+
+.touch-transition:active {
+  transform: scale(0.97);
+}
+
+/* Larger form inputs on mobile */
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="number"],
+  input[type="date"],
+  input[type="time"],
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    min-height: 48px;
+  }
+
+  /* Larger text for better readability */
+  body {
+    font-size: 16px;
+  }
+
+  /* Spacing for touch */
+  .mobile-spacing {
+    padding: 16px;
+  }
+
+  /* Card layouts for mobile */
+  .mobile-card {
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Tablet-specific */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Comfortable spacing for tablets */
+  .tablet-spacing {
+    padding: 20px;
+  }
+
+  /* Larger touch targets */
+  button, a[role="button"] {
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+}
+
+/* Swipe gestures */
+.swipeable {
+  touch-action: pan-y;
+  -webkit-user-drag: none;
+}
+
+.swipeable.horizontal {
+  touch-action: pan-x;
+}
+
+/* Active state for touch */
+.touch-active:active {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+/* Bottom sheet safe area (for iPhone notch, etc.) */
+.bottom-sheet {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Sticky headers with safe area */
+.sticky-header {
+  position: sticky;
+  top: env(safe-area-inset-top);
+  z-index: 10;
+}
+
+/* Prevent text selection on touch devices for UI elements */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Loading skeleton for better perceived performance */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Pull-to-refresh indicator */
+.pull-to-refresh {
+  overscroll-behavior-y: contain;
+}
+
+/* Touch ripple effect */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Improved scrollbar for touch devices */
+@media (pointer: coarse) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Landscape mode optimizations for tablets */
+@media (min-width: 768px) and (orientation: landscape) {
+  .landscape-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Portrait mode optimizations */
+@media (orientation: portrait) {
+  .portrait-stack {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Accessibility - increase contrast on touch devices */
+@media (pointer: coarse) {
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid #3b82f6;
+    outline-offset: 2px;
+  }
+}

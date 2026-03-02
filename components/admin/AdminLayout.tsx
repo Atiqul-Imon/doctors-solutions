@@ -12,15 +12,48 @@ import {
   LogOut,
   Menu,
   X,
-  FileCheck
+  FileCheck,
+  Keyboard
 } from 'lucide-react';
 import AdminHeader from './AdminHeader';
+import ShortcutHelper from '@/components/common/ShortcutHelper';
+import { useGlobalShortcuts } from '@/lib/hooks/useKeyboardShortcuts';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [showShortcutHelper, setShowShortcutHelper] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+
+  // Global keyboard shortcuts
+  useGlobalShortcuts({
+    onSearchOpen: () => {
+      // Trigger the search in header
+      const searchInput = document.querySelector('[data-search-trigger]') as HTMLElement;
+      if (searchInput) {
+        searchInput.click();
+      }
+    },
+    onNewPrescription: () => {
+      // This would typically open a prescription modal
+      // For now, navigate to prescription templates
+      router.push('/dashboard/prescription-templates');
+    },
+    onNewPatient: () => {
+      router.push('/dashboard/patients/new');
+    },
+    onTodayAppointments: () => {
+      router.push('/dashboard/appointments');
+    },
+    onDashboard: () => {
+      router.push('/dashboard');
+    },
+    onHelp: () => {
+      setShowShortcutHelper(true);
+    },
+  });
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -101,6 +134,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Sidebar Footer */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800">
+          {/* Keyboard Shortcuts Button */}
+          <button
+            onClick={() => setShowShortcutHelper(true)}
+            className="w-full flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors mb-2"
+          >
+            <Keyboard size={20} />
+            <span className="font-medium">Shortcuts</span>
+            <kbd className="ml-auto px-2 py-0.5 bg-gray-800 text-gray-400 rounded text-xs">
+              ?
+            </kbd>
+          </button>
+
           <div className="px-4 py-2 mb-2">
             <div className="text-xs text-gray-400">Logged in as</div>
             <div className="text-sm text-white font-medium truncate">
@@ -126,6 +171,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Page content */}
         <main className="p-4 lg:p-6 min-h-screen">{children}</main>
       </div>
+
+      {/* Keyboard Shortcuts Helper */}
+      <ShortcutHelper
+        isOpen={showShortcutHelper}
+        onClose={() => setShowShortcutHelper(false)}
+      />
     </div>
   );
 }

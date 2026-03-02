@@ -42,3 +42,6 @@ export function verifyRefreshToken(token: string): TokenPayload {
   }
 }
 
+// Alias for backward compatibility
+export const verifyToken = verifyAccessToken;
+

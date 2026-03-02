@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
+import QuickViewMode from '@/components/patient/QuickViewMode';
 import { 
   ArrowLeft, 
   User, 
@@ -22,18 +23,23 @@ import {
   Plus,
   FileCheck,
   Printer,
-  RotateCcw
+  RotateCcw,
+  Eye,
+  List
 } from 'lucide-react';
 
 type TabType = 'overview' | 'medical' | 'allergies' | 'medications' | 'vitals' | 'labs' | 'visits' | 'family' | 'insurance' | 'prescriptions';
+type ViewMode = 'quick' | 'full';
 
 export default function PatientDetailPage() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const patientId = params.id as string;
 
   const [patient, setPatient] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<ViewMode>('quick');
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState<any>({});
@@ -107,7 +113,13 @@ export default function PatientDetailPage() {
 
   useEffect(() => {
     fetchPatient();
-  }, [patientId]);
+    
+    // Check if URL has mode parameter
+    const mode = searchParams?.get('mode');
+    if (mode === 'quick') {
+      setViewMode('quick');
+    }
+  }, [patientId, searchParams]);
 
   useEffect(() => {
     if (activeTab === 'prescriptions' && patientId && !prescriptionsLoaded) {
@@ -923,49 +935,82 @@ export default function PatientDetailPage() {
           </div>
         </div>
         <div className="flex gap-2">
-          {isEditing ? (
-            <>
-              <Button variant="secondary" onClick={() => { setIsEditing(false); setEditData(patient); }}>
-                <X className="w-4 h-4 mr-2" />
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleSave}>
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
-              </Button>
-            </>
-          ) : (
-            <Button variant="primary" onClick={() => setIsEditing(true)}>
-              <Edit className="w-4 h-4 mr-2" />
-              Edit Patient
+          {/* View Mode Toggle */}
+          <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+            <Button
+              variant={viewMode === 'quick' ? 'primary' : 'outline'}
+              size="sm"
+              onClick={() => setViewMode('quick')}
+              className="flex items-center gap-2"
+            >
+              <Eye className="w-4 h-4" />
+              Quick View
             </Button>
+            <Button
+              variant={viewMode === 'full' ? 'primary' : 'outline'}
+              size="sm"
+              onClick={() => setViewMode('full')}
+              className="flex items-center gap-2"
+            >
+              <List className="w-4 h-4" />
+              Full Details
+            </Button>
+          </div>
+          {viewMode === 'full' && (
+            <>
+              {isEditing ? (
+                <>
+                  <Button variant="secondary" onClick={() => { setIsEditing(false); setEditData(patient); }}>
+                    <X className="w-4 h-4 mr-2" />
+                    Cancel
+                  </Button>
+                  <Button variant="primary" onClick={handleSave}>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </Button>
+                </>
+              ) : (
+                <Button variant="primary" onClick={() => setIsEditing(true)}>
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit Patient
+                </Button>
+              )}
+            </>
           )}
         </div>
       </div>
 
-      {/* Patient Info Card */}
-      <Card className="mb-6 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div>
-            <p className="text-sm text-gray-600 mb-1">Email</p>
-            <p className="font-semibold">{patient.email || 'Not provided'}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600 mb-1">Phone</p>
-            <p className="font-semibold">{patient.phone}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600 mb-1">Date of Birth</p>
-            <p className="font-semibold">
-              {patient.dateOfBirth ? new Date(patient.dateOfBirth).toLocaleDateString() : 'N/A'}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600 mb-1">Blood Group</p>
-            <p className="font-semibold">{patient.bloodGroup || 'Not recorded'}</p>
-          </div>
-        </div>
-      </Card>
+      {/* Quick View Mode */}
+      {viewMode === 'quick' && (
+        <QuickViewMode patient={patient} showActions={true} />
+      )}
+
+      {/* Full Details Mode (Original Tabs) */}
+      {viewMode === 'full' && (
+        <>
+          {/* Patient Info Card */}
+          <Card className="mb-6 p-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div>
+                <p className="text-sm text-gray-600 mb-1">Email</p>
+                <p className="font-semibold">{patient.email || 'Not provided'}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600 mb-1">Phone</p>
+                <p className="font-semibold">{patient.phone}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600 mb-1">Date of Birth</p>
+                <p className="font-semibold">
+                  {patient.dateOfBirth ? new Date(patient.dateOfBirth).toLocaleDateString() : 'N/A'}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600 mb-1">Blood Group</p>
+                <p className="font-semibold">{patient.bloodGroup || 'Not recorded'}</p>
+              </div>
+            </div>
+          </Card>
 
       {/* Tabs */}
       <div className="border-b border-gray-200 mb-6">
@@ -2302,6 +2347,8 @@ export default function PatientDetailPage() {
             </div>
           </Card>
         </div>
+      )}
+        </>
       )}
     </div>
   );

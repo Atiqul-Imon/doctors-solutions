@@ -8,9 +8,10 @@ import { Calendar, Clock, Search } from 'lucide-react';
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState<'today' | 'tomorrow' | 'week' | 'all'>('today');
   const [filters, setFilters] = useState({
     status: '',
-    date: '',
+    date: new Date().toISOString().split('T')[0], // Auto-set to today
   });
 
   const fetchAppointments = useCallback(async () => {
@@ -83,6 +84,32 @@ export default function AppointmentsPage() {
     }
   };
 
+  const handleQuickFilter = (filter: 'today' | 'tomorrow' | 'week' | 'all') => {
+    setActiveFilter(filter);
+    const today = new Date();
+    let newDate = '';
+
+    switch (filter) {
+      case 'today':
+        newDate = today.toISOString().split('T')[0];
+        break;
+      case 'tomorrow':
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        newDate = tomorrow.toISOString().split('T')[0];
+        break;
+      case 'week':
+        // For week, we'll clear the date filter to show all in range
+        newDate = '';
+        break;
+      case 'all':
+        newDate = '';
+        break;
+    }
+
+    setFilters({ ...filters, date: newDate });
+  };
+
   return (
     <div>
       <div className="mb-8">
@@ -90,8 +117,41 @@ export default function AppointmentsPage() {
         <p className="text-gray-600 mt-2">Manage all appointments</p>
       </div>
 
-      {/* Filters */}
-      <Card className="mb-6">
+      {/* Quick Date Filters */}
+      <Card className="mb-6 p-4">
+        <div className="flex flex-wrap gap-2 mb-4">
+          <Button
+            variant={activeFilter === 'today' ? 'primary' : 'outline'}
+            onClick={() => handleQuickFilter('today')}
+            size="sm"
+            className="font-semibold"
+          >
+            TODAY
+          </Button>
+          <Button
+            variant={activeFilter === 'tomorrow' ? 'primary' : 'outline'}
+            onClick={() => handleQuickFilter('tomorrow')}
+            size="sm"
+          >
+            TOMORROW
+          </Button>
+          <Button
+            variant={activeFilter === 'week' ? 'primary' : 'outline'}
+            onClick={() => handleQuickFilter('week')}
+            size="sm"
+          >
+            THIS WEEK
+          </Button>
+          <Button
+            variant={activeFilter === 'all' ? 'primary' : 'outline'}
+            onClick={() => handleQuickFilter('all')}
+            size="sm"
+          >
+            ALL
+          </Button>
+        </div>
+
+        {/* Advanced Filters */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -111,12 +171,15 @@ export default function AppointmentsPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Date
+              Specific Date
             </label>
             <input
               type="date"
               value={filters.date}
-              onChange={(e) => setFilters({ ...filters, date: e.target.value })}
+              onChange={(e) => {
+                setFilters({ ...filters, date: e.target.value });
+                setActiveFilter('all');
+              }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             />
           </div>

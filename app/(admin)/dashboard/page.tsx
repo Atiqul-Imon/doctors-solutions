@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Card from '@/components/ui/Card';
+import TodaySchedule from '@/components/dashboard/TodaySchedule';
+import PatientQueue from '@/components/dashboard/PatientQueue';
 import { Calendar, Users, Clock, CheckCircle } from 'lucide-react';
 
 export default function Dashboard() {
@@ -97,6 +99,16 @@ export default function Dashboard() {
                 </div>
               </Card>
             ))}
+          </div>
+
+          {/* Today's Schedule Widget */}
+          <div className="mb-8">
+            <TodaySchedule />
+          </div>
+
+          {/* Patient Queue */}
+          <div className="mb-8">
+            <PatientQueue />
           </div>
 
           {/* Recent Appointments */}
