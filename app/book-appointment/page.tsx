@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { Calendar, Clock, User, CheckCircle2, ArrowRight, ArrowLeft, AlertCircle } from 'lucide-react';
+import Calendar from '@/components/appointment/Calendar';
+import TimeSlotGrid, { TimeSlot } from '@/components/appointment/TimeSlotGrid';
+import { Calendar as CalendarIcon, Clock, User, CheckCircle2, ArrowRight, ArrowLeft, AlertCircle } from 'lucide-react';
 
 export default function BookAppointment() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -18,9 +20,38 @@ export default function BookAppointment() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
-  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
+  const [monthAvailability, setMonthAvailability] = useState<Record<string, { available: boolean; count: number }>>({});
+  const [loadingMonth, setLoadingMonth] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
+  // Fetch month availability for calendar
+  useEffect(() => {
+    const fetchMonthAvailability = async () => {
+      const date = selectedDate || new Date();
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+
+      setLoadingMonth(true);
+      try {
+        const response = await fetch(`/api/appointments/availability/month?year=${year}&month=${month}`);
+        const data = await response.json();
+
+        if (data.success) {
+          setMonthAvailability(data.data.availability || {});
+        }
+      } catch (error) {
+        console.error('Failed to fetch month availability:', error);
+      } finally {
+        setLoadingMonth(false);
+      }
+    };
+
+    fetchMonthAvailability();
+  }, [selectedDate]);
+
+  // Fetch available slots for selected date
   useEffect(() => {
     const fetchAvailableSlots = async () => {
       if (!formData.date) {
@@ -33,8 +64,8 @@ export default function BookAppointment() {
         const response = await fetch(`/api/appointments/available-slots?date=${formData.date}`);
         const data = await response.json();
 
-        if (data.success) {
-          setAvailableSlots(data.data.slots || []);
+        if (data.success && data.data.slots) {
+          setAvailableSlots(data.data.slots);
         } else {
           setAvailableSlots([]);
         }
@@ -51,7 +82,7 @@ export default function BookAppointment() {
 
   const steps = [
     { number: 1, title: 'Patient Info', icon: User },
-    { number: 2, title: 'Date & Time', icon: Calendar },
+    { number: 2, title: 'Date & Time', icon: CalendarIcon },
     { number: 3, title: 'Review', icon: CheckCircle2 },
   ];
 
@@ -140,7 +171,7 @@ export default function BookAppointment() {
       <div className="container mx-auto px-4 py-16 -mt-16 relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Progress Steps */}
-          <div className="mb-12 animate-fade-in-up">
+          <div className="mb-12 pt-8 animate-fade-in-up">{/* Added pt-8 for top padding */}
             <div className="flex items-center justify-between mb-8">
               {steps.map((step, index) => {
                 const Icon = step.icon;
@@ -269,9 +300,9 @@ export default function BookAppointment() {
                 </div>
               )}
 
-              {/* Step 2: Date & Time */}
+              {/* Step 2: Date & Time - Visual Selection */}
               {currentStep === 2 && (
-                <div className="space-y-6 animate-fade-in-up">
+                <div className="space-y-8 animate-fade-in-up">
                   <div>
                     <h2 className="text-2xl lg:text-3xl font-bold mb-2 text-gray-900">Select Date & Time</h2>
                     <p className="text-gray-600 text-sm md:text-base">
@@ -279,53 +310,66 @@ export default function BookAppointment() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="date" className="block text-sm font-semibold text-gray-700 mb-2">
-                        <Calendar className="w-5 h-5 inline mr-2" />
-                        Appointment Date *
-                      </label>
-                      <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        required
-                        min={minDate}
-                        max={maxDate}
-                        value={formData.date}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 hover:border-gray-300"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="time" className="block text-sm font-semibold text-gray-700 mb-2">
-                        <Clock className="w-5 h-5 inline mr-2" />
-                        Available Time *
-                      </label>
-                      <select
-                        id="time"
-                        name="time"
-                        required
-                        value={formData.time}
-                        onChange={handleChange}
-                        disabled={!formData.date || loadingSlots}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                      >
-                        <option value="">
-                          {loadingSlots ? 'Loading slots...' : formData.date ? 'Select a time' : 'Select date first'}
-                        </option>
-                        {availableSlots.map((slot) => (
-                          <option key={slot} value={slot}>
-                            {slot}
-                          </option>
-                        ))}
-                      </select>
-                      {formData.date && availableSlots.length === 0 && !loadingSlots && (
-                        <p className="text-xs text-red-600 mt-1">No available slots for this date</p>
-                      )}
-                    </div>
+                  {/* Visual Calendar */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">
+                      <CalendarIcon className="w-5 h-5 inline mr-2" />
+                      Select Appointment Date *
+                    </label>
+                    
+                    {loadingMonth && (
+                      <div className="text-center py-4 text-sm text-gray-600">
+                        Loading calendar availability...
+                      </div>
+                    )}
+                    
+                    <Calendar
+                      selectedDate={selectedDate}
+                      onDateSelect={(date) => {
+                        setSelectedDate(date);
+                        const dateStr = date.toISOString().split('T')[0];
+                        setFormData({
+                          ...formData,
+                          date: dateStr,
+                          time: '', // Reset time when date changes
+                        });
+                      }}
+                      minDate={new Date()}
+                      maxDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)}
+                      highlightedDates={Object.entries(monthAvailability)
+                        .filter(([_, data]) => data.available && data.count > 0)
+                        .map(([dateStr, data]) => ({
+                          date: new Date(dateStr),
+                          count: data.count,
+                        }))}
+                    />
                   </div>
 
+                  {/* Visual Time Slots */}
+                  {formData.date && (
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <Clock className="w-5 h-5 inline mr-2" />
+                        Select Time Slot *
+                      </label>
+                      <TimeSlotGrid
+                        slots={availableSlots}
+                        selectedSlot={formData.time}
+                        onSlotSelect={(time) => setFormData({ ...formData, time })}
+                        loading={loadingSlots}
+                      />
+                    </div>
+                  )}
+
+                  {!formData.date && (
+                    <div className="text-center py-8 bg-blue-50 rounded-lg border-2 border-dashed border-blue-300">
+                      <CalendarIcon className="w-12 h-12 text-blue-400 mx-auto mb-3" />
+                      <p className="text-blue-900 font-medium">Please select a date from the calendar above</p>
+                      <p className="text-sm text-blue-700 mt-1">Days with available slots are highlighted</p>
+                    </div>
+                  )}
+
+                  {/* Reason for Visit */}
                   <div>
                     <label htmlFor="reason" className="block text-sm font-semibold text-gray-700 mb-2">
                       Reason for Visit *
@@ -365,7 +409,7 @@ export default function BookAppointment() {
                       <div className="pb-4 border-b border-gray-200">
                         <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Appointment Details</h3>
                         <p className="text-gray-900 font-medium">
-                          <Calendar className="w-4 h-4 inline mr-2" />
+                          <CalendarIcon className="w-4 h-4 inline mr-2" />
                           {new Date(formData.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                         </p>
                         <p className="text-gray-900 font-medium mt-1">

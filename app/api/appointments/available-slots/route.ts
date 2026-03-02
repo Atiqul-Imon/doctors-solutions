@@ -71,8 +71,8 @@ export async function GET(req: NextRequest) {
 
     const bookedTimes = new Set(bookedAppointments.map((apt) => apt.time));
 
-    // Generate available time slots
-    const slots: string[] = [];
+    // Generate available time slots with detailed info
+    const slots: Array<{ time: string; available: boolean; booked: number; capacity: number }> = [];
     const [startHour, startMin] = schedule.startTime.split(':').map(Number);
     const [endHour, endMin] = schedule.endTime.split(':').map(Number);
     const startMinutes = startHour * 60 + startMin;
@@ -80,20 +80,53 @@ export async function GET(req: NextRequest) {
     const slotDuration = schedule.timeSlots && schedule.timeSlots.length > 0 
       ? schedule.timeSlots[0] 
       : 30; // Default 30 minutes
+    
+    // Set capacity per slot (default 3 appointments per slot)
+    const capacityPerSlot = 3;
+
+    // Get all appointments for each time slot
+    const appointmentsByTime = await Appointment.aggregate([
+      {
+        $match: {
+          date: { $gte: startOfDay, $lte: endOfDay },
+          status: { $in: ['pending', 'confirmed'] },
+        }
+      },
+      {
+        $group: {
+          _id: '$time',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const bookedCountMap = new Map(
+      appointmentsByTime.map(item => [item._id, item.count])
+    );
 
     for (let minutes = startMinutes; minutes < endMinutes; minutes += slotDuration) {
       const hours = Math.floor(minutes / 60);
       const mins = minutes % 60;
       const timeSlot = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
 
-      if (!bookedTimes.has(timeSlot)) {
-        slots.push(timeSlot);
-      }
+      const booked = bookedCountMap.get(timeSlot) || 0;
+      const available = booked < capacityPerSlot;
+
+      slots.push({
+        time: timeSlot,
+        available,
+        booked,
+        capacity: capacityPerSlot,
+      });
     }
 
     const response = NextResponse.json<ApiResponse>({
       success: true,
-      data: { slots },
+      data: { 
+        slots,
+        date,
+        slotDuration,
+      },
     });
 
     // Add caching headers (10 minutes cache for available slots - they change frequently)
