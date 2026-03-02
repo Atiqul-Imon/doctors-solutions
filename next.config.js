@@ -7,9 +7,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
   // Performance optimizations
   compress: true, // Enable gzip compression
   poweredByHeader: false, // Remove X-Powered-By header for security
@@ -18,6 +15,8 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
   },
+  // Empty turbopack config to silence the warning (use webpack for now)
+  turbopack: {},
   webpack: (config, { isServer }) => {
     if (isServer) {
       // Ensure PDFKit fonts are accessible in server build

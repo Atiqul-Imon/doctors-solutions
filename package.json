@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "mkdir -p public/fonts/pdfkit && cp -r node_modules/pdfkit/js/data/*.afm public/fonts/pdfkit/ 2>/dev/null || true",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
     "create-admin": "node scripts/create-admin.js",
@@ -20,10 +20,10 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.469.0",
     "mongoose": "^8.3.0",
-    "next": "^15.1.3",
+    "next": "^16.1.6",
     "pdfkit": "^0.17.2",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-hook-form": "^7.51.0",
     "tailwind-merge": "^2.2.1"
   },
@@ -36,7 +36,7 @@
     "autoprefixer": "^10.4.20",
     "copy-webpack-plugin": "^13.0.1",
     "eslint": "^9.17.0",
-    "eslint-config-next": "^15.5.6",
+    "eslint-config-next": "^16.1.6",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2"
